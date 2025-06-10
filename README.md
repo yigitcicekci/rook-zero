@@ -2,13 +2,13 @@
 
 ## 🚀 Özellikler
 
-- **Real-time Multiplayer**: Socket.IO ile gerçek zamanlı çok oyunculu satranç
-- **Redis Integration**: Match ve player durumlarının Redis'te saklanması
-- **Advanced Chess Engine**: Pin detection, en passant, castling gibi gelişmiş satranç kuralları
-- **Comprehensive Test Suite**: 96+ test ile kapsamlı chess logic validation
-- **Performance Analytics**: Detaylı performans metrikleri ve timing analysis
-- **Game Simulation**: Otomatik oyun simülasyonu ve test araçları
-- **Docker Support**: Docker ve Docker Compose desteği
+- **Gerçek Zamanlı Çoklu Oyuncu**: Socket.IO ile anlık çoklu oyuncu satranç
+- **Redis Entegrasyonu**: Maç ve oyuncu durumlarının Redis'te saklanması
+- **Gelişmiş Satranç Motoru**: Pin tespiti, en passant, rok gibi gelişmiş satranç kuralları
+- **Kapsamlı Test Sistemi**: 96+ test ile eksiksiz satranç mantığı doğrulaması
+- **Performans Analizi**: Detaylı performans metrikleri ve zamanlama analizi
+- **Oyun Simülasyonu**: Otomatik oyun simülasyonu ve test araçları
+- **Docker Desteği**: Docker ve Docker Compose desteği
 
 ## 📋 Gereksinimler
 
@@ -53,56 +53,58 @@ npm run docker:down
 
 ### Test Türleri ve Açıklamaları
 
-#### Test Suites for Simulations
+#### 1. Simülasyon Test Paketleri
 ```bash
-npm test:all
+npm run test:all  # Tüm testleri çalıştır
 ```
 
-**11 Test Suite'i içerir:**
+**11 Test Paketi İçerir:**
 
-- **Engine Tests** (`chess-engine/__tests__/engine.test.ts`)
-  - ChessEngine constructor validation
-  - Game state management
-  - FEN notation parsing
-  - Basic move validation
+##### Satranç Motoru Testleri (`chess-engine/__tests__/`)
 
-- **Piece Movement Tests** 
-  - `knight.test.ts`: Knight L-shape movement validation
-  - `queen.test.ts`: Queen diagonal/straight movement 
-  - `king.test.ts`: King movement + castling logic
-  - `rook.test.ts`: Rook straight-line movement
-  - `bishop.test.ts`: Bishop diagonal movement  
-  - `pawn.test.ts`: Pawn forward/capture/en passant
+- **Motor Testleri** (`engine.test.ts`)
+  - ChessEngine yapıcı doğrulaması
+  - Oyun durumu yönetimi
+  - FEN notasyonu ayrıştırması
+  - Temel hamle doğrulaması
 
-- **Special Rules Tests** (`special-rules.test.ts`)
-  - Castling (kingside/queenside)
-  - En passant capture
-  - Pawn promotion
-  - Check/checkmate detection
+- **Taş Hareketi Testleri**
+  - `knight.test.ts`: At'ın L-şeklinde hareket doğrulaması
+  - `queen.test.ts`: Vezir'in çapraz/düz hareket testi
+  - `king.test.ts`: Şah hareketi + rok mantığı
+  - `rook.test.ts`: Kale'nin düz çizgi hareketi
+  - `bishop.test.ts`: Fil'in çapraz hareket testi
+  - `pawn.test.ts`: Piyon ileri/yakalama/en passant testleri
 
-- **Critical Chess Logic** (`critical-chess-logic.test.ts`)
-  - Pin detection (pieces can't move if king would be in check)
-  - King safety validation
-  - Complex board scenarios
+- **Özel Kurallar Testleri** (`special-rules.test.ts`)
+  - Rok (kısa/uzun rok)
+  - En passant yakalama
+  - Piyon terfi etme
+  - Şah/mat tespiti
 
-- **Match Scenarios** (`match-scenarios.test.ts`)
-  - Real game situation tests
-  - Multi-move sequences
+- **Kritik Satranç Mantığı** (`critical-chess-logic.test.ts`)
+  - Pin tespiti (şah tehlikesine neden olan taşların hareketi engellenir)
+  - Şah güvenliği doğrulaması
+  - Karmaşık tahta senaryoları
 
-#### 2. Performance & Integration Tests
+- **Maç Senaryoları** (`match-scenarios.test.ts`)
+  - Gerçek oyun durumu testleri
+  - Çoklu hamle dizileri
 
-##### Basic Test Suite
+#### 2. Performans ve Entegrasyon Testleri
+
+##### Temel Test Paketi
 ```bash
 npx ts-node src/tests/basicTest.ts
 ```
 
-**Testler:**
-- ✅ Redis connection (ping/pong)
-- ✅ Match creation (UUID generation)  
-- ✅ Player joining (white/black assignment)
-- ✅ Move validation (e2-e4 pawn move)
-- ✅ System statistics (match counts)
-- ✅ Cleanup operations (match deletion)
+**Test Edilen Fonksiyonlar:**
+- ✅ Redis bağlantısı (ping/pong)
+- ✅ Maç oluşturma (UUID üretimi)
+- ✅ Oyuncu katılımı (beyaz/siyah atama)
+- ✅ Hamle doğrulaması (e2-e4 piyon hamlesi)
+- ✅ Sistem istatistikleri (maç sayıları)
+- ✅ Temizlik işlemleri (maç silme)
 
 
 ##### Chess Engine Validator
@@ -110,40 +112,44 @@ npx ts-node src/tests/basicTest.ts
 npx ts-node src/tests/chessEngineValidator.ts
 ```
 
-**Advanced Performance Analysis:**
-- Individual move timing (validation vs execution)
-- Chess logic edge case testing
-- FEN notation consistency
-- Turn management validation
+**Gelişmiş Performans Analizi:**
+- Bireysel hamle zamanlaması (doğrulama vs yürütme)
+- Satranç mantığı uç durum testleri
+- FEN notasyonu tutarlılığı
+- Sıra yönetimi doğrulaması
 
-
-##### X&Y User Comprehensive Test
+##### X&Y Kullanıcı Kapsamlı Testi
 ```bash
-npx ts-node src/tests/xyUserTest.ts
+npm run test:xy-users
 ```
 
-**Real-world Scenario Testing:**
-- Socket connection establishment
-- Match creation and joining flow
-- Italian Game opening moves (e4, e5, Nf3, Nc6, Bc4, Be7, O-O)
-- Edge cases (invalid moves, wrong turns)
-- Player disconnect/reconnect scenarios
-- Performance under load
+**Gerçek Dünya Senaryosu Testleri:**
+- Socket bağlantısı kurulumu
+- Maç oluşturma ve katılma akışı
+- İtalyan Oyunu açılış hamleleri (e4, e5, Nf3, Nc6, Bc4, Be7, O-O)
+- Uç durumlar (geçersiz hamleler, yanlış sıralar)
+- Oyuncu bağlantı kesme/yeniden bağlanma senaryoları
+- Yük altında performans
 
 ##### Interactive Chess Test
 ```bash
 npx ts-node src/tests/interactiveChessTest.ts
 ```
 
-**Human-in-the-Loop Testing:**
-- 🎮 Two players can play against each other
-- 🕹️ Real-time move input with ASCII board display
-- ⏱️ Live performance metrics (validation/execution timing)
-- 📊 Comprehensive error tracking and analysis
-- 🎯 Production environment simulation
-- 📈 Success rate monitoring
+**Çift Modlu Test Sistemi:**
+- **Mod 1**: Yerel Motor (tek terminal, 2 oyuncu sırayla)
+- **Mod 2**: Ağ Çoklu Oyuncu (Redis/Socket.IO ile 2 istemci)
 
-**Commands Available:**
+**Özellikler:**
+- 🎮 İki oyuncu birbirine karşı oynayabilir
+- 🕹️ ASCII tahta gösterimi ile gerçek zamanlı hamle girişi
+- ⏱️ Canlı performans metrikleri (doğrulama/yürütme zamanlaması)
+- 📊 Kapsamlı hata takibi ve analizi
+- 🎯 Üretim ortamı simülasyonu
+- 📈 Başarı oranı izleme
+- 🌐 Socket.IO entegrasyonu ve FEN ayrıştırması
+
+**Kullanılabilir Komutlar:**
 ```
 🎯 Player 1 (white), your move: e2-e4    # Make a move
 🎯 Player 1 (white), your move: stats    # Show performance stats
@@ -153,15 +159,14 @@ npx ts-node src/tests/interactiveChessTest.ts
 🎯 Player 1 (white), your move: quit     # Exit game
 ```
 
-
-### Test Execution Order
+### Test Yürütme Sırası
 ```bash
-npm test:all                              # For simulation tests
-npm test                                    # Jest suite (96 tests)
-npx ts-node src/tests/basicTest.ts         # Basic functionality
-npx ts-node src/tests/chessEngineValidator.ts  # Chess logic validation
-npx ts-node src/tests/xyUserTest.ts        # Integration testing
-npx ts-node src/tests/interactiveChessTest.ts  # Interactive play testing
+npm run test:all                              # Simülasyon testleri için
+npm test                                      # Jest paketi (96 test)
+npx ts-node src/tests/basicTest.ts           # Temel fonksiyonalite
+npx ts-node src/tests/chessEngineValidator.ts # Satranç mantığı doğrulaması
+npm run test:xy-users                        # Entegrasyon testi
+npx ts-node src/tests/interactiveChessTest.ts # Etkileşimli oyun testi
 ```
 
 ## 🎮 Kullanım
@@ -178,68 +183,70 @@ npm start
 
 Server `http://localhost:3001` adresinde çalışacaktır.
 
-### API Endpoints
-- `GET /api/stats` - Sistem istatistikleri (matches, players)
+### API Uç Noktaları
+- `GET /api/stats` - Sistem istatistikleri (maçlar, oyuncular)
 - `GET /api/matches/pending` - Bekleyen maçlar
 - `GET /api/matches/:matchId` - Maç detayları
 
 ### Socket.IO Events
 
-#### Client to Server
-- `identify` - Oyuncu kimlik doğrulama
-- `create_match` - Yeni maç oluşturma  
+#### İstemciden Sunucuya
+- `identify` - Oyuncu kimlik doğrulaması
+- `create_match` - Yeni maç oluşturma
 - `join_match` - Maça katılma
 - `make_move` - Hamle yapma
 - `resign` - Oyundan çekilme
 
-#### Server to Client
+#### Sunucudan İstemciye
 - `match_created` - Yeni maç oluşturuldu
 - `match_started` - Maç başladı
 - `move_made` - Hamle yapıldı
 - `player_joined` - Oyuncu katıldı
 - `game_over` - Oyun bitti
 
-## 📊 Performance Metrics
+## 📊 Performans Metrikleri
 
-### Chess Engine Performance
-- **Sub-millisecond**: Average move processing time
-- **Pin Detection**: Prevents illegal moves exposing king
-- **Memory Efficient**: 32 piece tracking system
-- **FEN Compliant**: Standard chess notation support
+### Satranç Motoru Performansı
+- **Milisaniye Altı**: Ortalama hamle işleme süresi (0.40-1.50ms)
+- **Pin Tespiti**: Şahı tehlikeye atan geçersiz hamleleri engeller
+- **Bellek Verimli**: 32 taş takip sistemi
+- **FEN Uyumlu**: Standart satranç notasyonu desteği
+- **Mat Tespiti**: Otomatik şah/mat/pat durumu algılama
 
-### System Performance
-- **Redis Operations**: ~7ms connection time
-- **Socket Connections**: ~6.54ms average
-- **Move Validation**: ~0.17ms average
-- **Network Latency**: ~1000ms simulated realistic delays
+### Sistem Performansı
+- **Redis İşlemleri**: ~7ms bağlantı süresi
+- **Socket Bağlantıları**: ~6.54ms ortalama
+- **Hamle Doğrulaması**: ~0.17ms ortalama
+- **Ağ Gecikmesi**: ~1000ms simüle edilmiş gerçekçi gecikmeler
 
-### Success Rates
-- **Move Success Rate**: 75% (expected failures for invalid moves)
-- **Connection Reliability**: 100% in test scenarios
-- **Turn Management**: 100% accuracy
+### Başarı Oranları
+- **Hamle Başarı Oranı**: %75 (geçersiz hamleler için beklenen başarısızlıklar)
+- **Bağlantı Güvenilirliği**: Test senaryolarında %100
+- **Sıra Yönetimi**: %100 doğruluk
 
 ## 🏗️ Proje Yapısı
 
 ```
 ├── src/
 │   ├── services/
-│   │   ├── redis.ts          # Redis service (connection management)
-│   │   └── matchManager.ts   # Match lifecycle management  
+│   │   ├── redis.ts          # Redis servisi (bağlantı yönetimi)
+│   │   └── matchManager.ts   # Maç yaşam döngüsü yönetimi
 │   ├── socket/
-│   │   └── socketHandler.ts  # Socket.IO event handler
+│   │   └── socketHandler.ts  # Socket.IO olay işleyicisi
 │   ├── types/
-│   │   └── game.ts          # TypeScript type definitions
+│   │   └── game.ts          # TypeScript tip tanımları
 │   ├── tests/
-│   │   ├── basicTest.ts     # Basic functionality tests
-│   │   ├── chessEngineValidator.ts  # Chess logic validation
-│   │   └── xyUserTest.ts    # Integration & user simulation
-│   └── server.ts            # Express + Socket.IO server
-├── chess-engine/            # Chess engine implementation
-│   ├── engine.ts            # Main engine class
-│   ├── pieces/             # Piece movement logic
-│   └── __tests__/          # Jest test files
-├── docker-compose.yml       # Docker compose config
-├── Dockerfile              # Docker image config  
+│   │   ├── basicTest.ts     # Temel fonksiyonalite testleri
+│   │   ├── chessEngineValidator.ts  # Satranç mantığı doğrulaması
+│   │   ├── xyUserTest.ts    # Entegrasyon ve kullanıcı simülasyonu
+│   │   └── interactiveChessTest.ts  # Etkileşimli test sistemi
+│   └── server.ts            # Express + Socket.IO sunucusu
+├── chess-engine/            # Satranç motoru implementasyonu
+│   ├── engine.ts            # Ana motor sınıfı
+│   ├── pieces/             # Taş hareket mantığı
+│   └── __tests__/          # Jest test dosyaları
+├── docker-compose.yml       # Docker compose yapılandırması
+├── Dockerfile              # Docker image yapılandırması
 └── package.json
 ```
 
@@ -259,28 +266,31 @@ CORS_ORIGIN=*
 ```bash
 docker-compose -f docker-compose.yml up -d
 ```
-### Common Issues
 
-1. **Port Already in Use**
+### Yaygın Sorunlar
+
+1. **Port Zaten Kullanımda**
    ```bash
    lsof -ti:3000 | xargs kill -9
    ```
 
-2. **Redis Memory Full**
+2. **Redis Bellek Dolu**
    ```bash
    redis-cli FLUSHALL
    ```
 
-3. **TypeScript Compilation Errors**
+3. **TypeScript Derleme Hataları**
    ```bash
    npx tsc --noEmit
    ```
 
-## 📈 Test Results Summary
+## 📈 Test Sonuçları Özeti
 
-### Latest Test Run Results:
-- ✅ **96/96 Jest Tests Passing**
-- ✅ **All Integration Tests Passing**  
-- ✅ **Performance Benchmarks Met**
-- ✅ **Chess Logic Validation Complete**
-- ✅ **No Linter Errors**
+### Son Test Çalıştırma Sonuçları:
+- ✅ **96/96 Jest Testi Başarılı**
+- ✅ **Tüm Entegrasyon Testleri Başarılı**
+- ✅ **Performans Kriterlerini Karşılıyor**
+- ✅ **Satranç Mantığı Doğrulaması Tamamlandı**
+- ✅ **Linter Hatası Yok**
+
+
