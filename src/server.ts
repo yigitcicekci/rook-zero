@@ -19,28 +19,7 @@ const io = new SocketIOServer(server, {
 });
 
 app.use(cors(corsOptions));
-app.use(express.json());
-
-app.get('/health', async (req, res) => {
-  try {
-    const redisStatus = await redisService.ping();
-    const stats = {
-      status: 'healthy',
-      timestamp: new Date().toISOString(),
-      redis: redisStatus === 'PONG' ? 'connected' : 'disconnected',
-      uptime: process.uptime()
-    };
-    
-    res.json(stats);
-  } catch (error) {
-    res.status(500).json({
-      status: 'unhealthy',
-      timestamp: new Date().toISOString(),
-      error: 'Redis connection failed'
-    });
-  }
-});
- 
+app.use(express.json()); 
 app.get('/api/stats', async (req, res) => {
   try {
     const totalMatches = await redisService.getTotalMatches();
@@ -111,7 +90,6 @@ async function start() {
     console.log('Redis connected successfully');
     server.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
-      console.log(`Health check available at http://localhost:${PORT}/health`);
       console.log(`Socket.IO server ready for connections`);
     });
   } catch (error) {
