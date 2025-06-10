@@ -176,11 +176,9 @@ npm run dev
 npm start
 ```
 
-Server `http://localhost:3000` adresinde çalışacaktır.
+Server `http://localhost:3001` adresinde çalışacaktır.
 
 ### API Endpoints
-
-- `GET /health` - Sistem sağlık durumu
 - `GET /api/stats` - Sistem istatistikleri (matches, players)
 - `GET /api/matches/pending` - Bekleyen maçlar
 - `GET /api/matches/:matchId` - Maç detayları
