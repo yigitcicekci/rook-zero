@@ -141,7 +141,7 @@ export class XYUserTest {
   }
 
   private async testChessEngineWithRealMoves(): Promise<void> {
-    console.log('3️⃣ Testing Chess Engine with Real Moves...\n');
+    console.log('3️⃣ Testing Rook Zero with Real Moves...\n');
 
 
     const testMoves = [
@@ -333,7 +333,7 @@ export class XYUserTest {
       }
     }
 
-    console.log('\n🎯 Chess Engine Analysis:');
+    console.log('\n🎯 Rook Zero Analysis:');
     const moveTests = this.testResults.filter(t => t.test.startsWith('move_'));
     const successfulMoves = moveTests.filter(t => t.passed).length;
     console.log(`   Move Success Rate: ${successfulMoves}/${moveTests.length} (${((successfulMoves/moveTests.length)*100).toFixed(1)}%)`);

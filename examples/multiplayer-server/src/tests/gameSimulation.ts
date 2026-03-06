@@ -63,7 +63,7 @@ export class GameSimulation {
   }
 
   async startGame(): Promise<void> {
-    console.log('🚀 Starting Chess Game Simulation...');
+    console.log('🚀 Starting Rook Zero Game Simulation...');
     console.log('⏱️  Performance Analytics Enabled');
     console.log(`🔧 Configuration:`);
     console.log(`   - Server: ${this.config.serverUrl}`);

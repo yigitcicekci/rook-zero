@@ -23,8 +23,6 @@
   "exclude": [
     "dist",
     "node_modules",
-    "src/tests/**/*",
-    "../../chess-engine/**/__tests__/**/*",
-    "../../chess-engine/**/*.test.ts"
+    "src/tests/**/*"
   ]
 }

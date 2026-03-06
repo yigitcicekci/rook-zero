@@ -1,14 +1,14 @@
 {
   "name": "rook-zero",
   "version": "1.0.0",
-  "description": "Reusable TypeScript chess engine with move validation, FEN helpers, and typed board state utilities.",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "description": "Chess rules, notation, and Elo rating library with strict validation and legal move generation.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/src/index.d.ts",
-      "require": "./dist/src/index.js",
-      "default": "./dist/src/index.js"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -21,7 +21,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist rook-zero-*.tgz",
-    "test": "jest --runInBand",
+    "test": "jest --runInBand --watchman=false",
     "example:build": "npm --prefix examples/multiplayer-server run build",
     "example:dev": "npm --prefix examples/multiplayer-server run dev",
     "example:start": "npm --prefix examples/multiplayer-server run start",
@@ -40,6 +40,11 @@
     "chess-engine",
     "typescript",
     "fen",
+    "san",
+    "uci",
+    "pgn",
+    "elo",
+    "rating",
     "move-validation",
     "board-game"
   ],

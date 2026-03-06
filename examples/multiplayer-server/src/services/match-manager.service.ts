@@ -1,10 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
-import { ChessEngine, DEFAULT_FEN, findPiece } from 'rook-zero';
+import { RkEngine, DEFAULT_FEN, type Square } from '../lib/rook-zero';
 import { GameMove, Match, MatchStats, Player } from '../types/game';
 import { redisService } from './redis.service';
 
+function positionToSquare(position: GameMove['from']): Square {
+  return `${String.fromCharCode(97 + position.col)}${8 - position.row}` as Square;
+}
+
 export class MatchManager {
-  private engines: Map<string, ChessEngine> = new Map();
+  private engines: Map<string, RkEngine> = new Map();
 
   async createNewMatch(): Promise<string> {
     const matchId = uuidv4();
@@ -25,7 +29,7 @@ export class MatchManager {
 
     await redisService.saveMatch(match);
     await redisService.incrementMatchCount();
-    this.engines.set(matchId, new ChessEngine());
+    this.engines.set(matchId, new RkEngine());
 
     console.log(`Created new match: ${matchId}`);
     return matchId;
@@ -106,32 +110,28 @@ export class MatchManager {
       return { success: false, error: 'Not your turn' };
     }
 
-    const engine = this.engines.get(matchId) ?? new ChessEngine(match.fen);
+    const engine = this.engines.get(matchId) ?? new RkEngine(match.fen);
     if (!this.engines.has(matchId)) {
       this.engines.set(matchId, engine);
     }
 
-    const piece = findPiece(engine.getBoard(), move.from);
     const chessMove = {
-      from: move.from,
-      to: move.to,
-      piece: piece || {} as any,
-      isCapture: false,
-      isCastling: move.isCastling || move.notation === 'O-O' || move.notation === 'O-O-O'
+      from: positionToSquare(move.from),
+      to: positionToSquare(move.to)
     };
 
-    const validationResult = engine.isMoveValid(chessMove);
-    if (!validationResult.valid) {
-      return { success: false, invalidMove: true, error: validationResult.error };
+    const validationResult = engine.validateMove(chessMove);
+    if (!validationResult.ok) {
+      return { success: false, invalidMove: true, error: validationResult.reason };
     }
 
-    if (!engine.makeMove(chessMove)) {
-      return { success: false, invalidMove: true, error: 'Invalid move' };
+    if (!engine.move(chessMove)) {
+      return { success: false, invalidMove: true, error: 'invalid-move' };
     }
 
     match.moveHistory.push(move.notation);
-    match.currentTurn = match.currentTurn === 'white' ? 'black' : 'white';
-    match.fen = engine.getFEN();
+    match.currentTurn = engine.turn() === 'w' ? 'white' : 'black';
+    match.fen = engine.fen();
     match.lastActivity = new Date();
 
     await redisService.updateMatch(match);
