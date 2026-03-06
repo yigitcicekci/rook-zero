@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-board-light: #f0d9b5;
+  --color-board-dark: #b58863;
+  --color-highlight: rgba(155, 199, 0, 0.41);
+  --color-brand-purple: #7c3aed;
+  --color-brand-dark: #1e1b4b;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased dark:bg-slate-950 dark:text-slate-50 transition-colors duration-200;
+  }
+}

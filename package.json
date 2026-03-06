@@ -22,6 +22,8 @@
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist rook-zero-*.tgz",
     "test": "jest --runInBand --watchman=false",
+    "demo:dev": "npm --prefix apps/demo-web run dev",
+    "demo:build": "npm --prefix apps/demo-web run build",
     "example:build": "npm --prefix examples/multiplayer-server run build",
     "example:dev": "npm --prefix examples/multiplayer-server run dev",
     "example:start": "npm --prefix examples/multiplayer-server run start",
