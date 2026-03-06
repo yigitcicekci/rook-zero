@@ -181,7 +181,3 @@ npm run build
 npm test
 npm pack
 ```
-
-## Example App
-
-The multiplayer backend is not part of the published package. The demo server remains under `examples/multiplayer-server/`.
