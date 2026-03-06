@@ -50,7 +50,7 @@ function App() {
           <div className="flex gap-4 sm:gap-6 items-center text-sm font-medium text-slate-600 dark:text-slate-300">
             <a href="#playground" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">{text.nav.playground}</a>
             <a href="#api" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">{text.nav.api}</a>
-            <a href="https://github.com/yigitcicekci/rook-zero" target="_blank" rel="noreferrer" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors hidden sm:block">GitHub</a>
+            <a href="https://github.com/yigitcicekci/rook-zero" target="_blank" rel="noreferrer noopener" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors hidden sm:block">GitHub</a>
             
             <div className="relative flex items-center justify-center bg-indigo-50 dark:bg-indigo-900/30 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors focus-within:ring-2 focus-within:ring-indigo-500">
               <select 

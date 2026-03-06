@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@yigitcicekci/rook-zero": "file:../..",
+    "@yigitcicekci/rook-zero": "^1.0.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.35.0",
     "lucide-react": "^0.577.0",
