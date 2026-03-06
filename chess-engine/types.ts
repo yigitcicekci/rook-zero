@@ -54,6 +54,19 @@ export interface MoveValidationResult {
   riskScore?: number;
 }
 
+export interface FlaggedMove {
+  move: Move;
+  riskScore: number;
+}
+
+export type GameOverReason = 'checkmate' | 'stalemate' | 'fifty-move-rule';
+
+export interface GameOverResult {
+  gameOver: boolean;
+  result?: string;
+  reason?: GameOverReason;
+}
+
 export interface GameState {
   activeColor: PieceColor;
   halfMoves: number;

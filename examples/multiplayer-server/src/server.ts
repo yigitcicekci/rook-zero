@@ -2,8 +2,8 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import cors from 'cors';
-import { redisService } from './services/redis';
-import { SocketHandler } from './socket/socketHandler';
+import { redisService } from './services/redis.service';
+import { SocketHandler } from './socket/socket-handler';
 
 const app = express();
 const server = createServer(app);

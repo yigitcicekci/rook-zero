@@ -1,6 +1,5 @@
 import readline from 'readline';
-import { ChessEngine } from '../../chess-engine/engine';
-import { PieceType, PieceColor } from '../../chess-engine/types';
+import { ChessEngine, PieceColor, PieceType } from 'rook-zero';
 import { io, Socket } from 'socket.io-client';
 
 interface Player {
@@ -50,7 +49,7 @@ export class InteractiveChessTest {
   };
   private isMultiplayer: boolean = false;
   private matchId?: string;
-  private serverUrl: string = 'http://localhost:3001';
+  private serverUrl: string = 'http://localhost:3000';
   private currentBoard: any = null;
   private currentGameState: any = null;
 

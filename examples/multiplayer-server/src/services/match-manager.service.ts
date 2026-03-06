@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Match, Player, GameMove, MatchStats } from '../types/game';
-import { redisService } from './redis';
-import ChessEngine from '../../chess-engine';
+import { ChessEngine, DEFAULT_FEN, findPiece } from 'rook-zero';
+import { GameMove, Match, MatchStats, Player } from '../types/game';
+import { redisService } from './redis.service';
 
 export class MatchManager {
   private engines: Map<string, ChessEngine> = new Map();
@@ -9,7 +9,6 @@ export class MatchManager {
   async createNewMatch(): Promise<string> {
     const matchId = uuidv4();
     const now = new Date();
-
     const match: Match = {
       id: matchId,
       status: 'pending',
@@ -20,13 +19,12 @@ export class MatchManager {
       createdAt: now,
       lastActivity: now,
       currentTurn: 'white',
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      fen: DEFAULT_FEN,
       moveHistory: []
     };
 
     await redisService.saveMatch(match);
     await redisService.incrementMatchCount();
-
     this.engines.set(matchId, new ChessEngine());
 
     console.log(`Created new match: ${matchId}`);
@@ -44,7 +42,7 @@ export class MatchManager {
       return { success: false, error: 'Match is not available for joining' };
     }
 
-    const existingPlayer = Object.values(match.players).find(p => p?.id === playerId);
+    const existingPlayer = Object.values(match.players).find(player => player?.id === playerId);
     if (existingPlayer) {
       existingPlayer.socketId = socketId;
       existingPlayer.connected = true;
@@ -99,60 +97,35 @@ export class MatchManager {
       return { success: false, error: 'Match is not active' };
     }
 
-    const player = Object.values(match.players).find(p => p?.id === playerId);
+    const player = Object.values(match.players).find(candidate => candidate?.id === playerId);
     if (!player) {
       return { success: false, error: 'Player not in this match' };
     }
 
     if (player.color !== match.currentTurn) {
-      console.log(`DEBUG: Player ${playerId} (${player.color}) tried to move but it's ${match.currentTurn}'s turn`);
       return { success: false, error: 'Not your turn' };
     }
 
-    const engine = this.engines.get(matchId);
-    if (!engine) {
-      const newEngine = new ChessEngine(match.fen);
-      this.engines.set(matchId, newEngine);
-      console.log(`DEBUG: Created new engine for match ${matchId} with FEN: ${match.fen}`);
-      return this.executeMove(matchId, playerId, move);
+    const engine = this.engines.get(matchId) ?? new ChessEngine(match.fen);
+    if (!this.engines.has(matchId)) {
+      this.engines.set(matchId, engine);
     }
 
-    console.log(`DEBUG: Current turn: ${match.currentTurn}, Player: ${player.color}, Engine state: ${engine.getCurrentPlayer()}`);
-
-    const board = engine.getBoard();
-    console.log(`DEBUG: Board has ${board.pieces.length} pieces`);
-    console.log(`DEBUG: Board FEN field: "${board.fen}"`);
-    console.log(`DEBUG: Engine full FEN: "${engine.getFEN()}"`);
-    console.log(`DEBUG: Looking for piece at ${move.from.row},${move.from.col}`);
-    
-    const pieceAtPosition = board.pieces.find(p => 
-      p.position.row === move.from.row && p.position.col === move.from.col
-    );
-    
-    if (pieceAtPosition) {
-      console.log(`DEBUG: Found piece: ${pieceAtPosition.type} ${pieceAtPosition.color} at ${pieceAtPosition.position.row},${pieceAtPosition.position.col}`);
-    } else {
-      console.log(`DEBUG: NO PIECE FOUND at ${move.from.row},${move.from.col}`);
-      console.log(`DEBUG: Available pieces:`, board.pieces.map(p => `${p.type}${p.color} at ${p.position.row},${p.position.col}`));
-    }
-
+    const piece = findPiece(engine.getBoard(), move.from);
     const chessMove = {
       from: move.from,
       to: move.to,
-      piece: pieceAtPosition || {} as any,
+      piece: piece || {} as any,
       isCapture: false,
       isCastling: move.isCastling || move.notation === 'O-O' || move.notation === 'O-O-O'
     };
 
     const validationResult = engine.isMoveValid(chessMove);
-    console.log(`DEBUG: Move validation result:`, validationResult);
-    
     if (!validationResult.valid) {
       return { success: false, invalidMove: true, error: validationResult.error };
     }
 
-    const moveSuccess = engine.makeMove(chessMove);
-    if (!moveSuccess) {
+    if (!engine.makeMove(chessMove)) {
       return { success: false, invalidMove: true, error: 'Invalid move' };
     }
 
@@ -161,8 +134,6 @@ export class MatchManager {
     match.fen = engine.getFEN();
     match.lastActivity = new Date();
 
-    console.log(`DEBUG: Move successful, new FEN: ${match.fen}, next turn: ${match.currentTurn}`);
-    
     await redisService.updateMatch(match);
 
     return { success: true, match };
@@ -179,7 +150,7 @@ export class MatchManager {
       return { success: false, error: 'Match is not active' };
     }
 
-    const player = Object.values(match.players).find(p => p?.id === playerId);
+    const player = Object.values(match.players).find(candidate => candidate?.id === playerId);
     if (!player) {
       return { success: false, error: 'Player not in this match' };
     }
@@ -194,7 +165,6 @@ export class MatchManager {
     match.lastActivity = new Date();
 
     await redisService.updateMatch(match);
-
     this.engines.delete(matchId);
 
     return { success: true, match };
@@ -226,26 +196,30 @@ export class MatchManager {
 
   async handlePlayerLeave(playerId: string): Promise<void> {
     const allMatches = await redisService.findMatchesByStatus('active');
-    
+
     for (const matchId of allMatches) {
       const match = await redisService.getMatch(matchId);
-      if (!match) continue;
-
-      const player = Object.values(match.players).find(p => p?.id === playerId);
-      if (player) {
-        player.connected = false;
-        match.lastActivity = new Date();
-
-        const otherPlayer = Object.values(match.players).find(p => p && p.id !== playerId);
-        if (!otherPlayer?.connected) {
-          match.status = 'abandoned';
-          match.endedAt = new Date();
-        }
-
-        await redisService.updateMatch(match);
-        await redisService.clearPlayerSession(playerId);
-        break;
+      if (!match) {
+        continue;
       }
+
+      const player = Object.values(match.players).find(candidate => candidate?.id === playerId);
+      if (!player) {
+        continue;
+      }
+
+      player.connected = false;
+      match.lastActivity = new Date();
+
+      const otherPlayer = Object.values(match.players).find(candidate => candidate && candidate.id !== playerId);
+      if (!otherPlayer?.connected) {
+        match.status = 'abandoned';
+        match.endedAt = new Date();
+      }
+
+      await redisService.updateMatch(match);
+      await redisService.clearPlayerSession(playerId);
+      break;
     }
   }
 
@@ -267,9 +241,8 @@ export class MatchManager {
 
   async cleanupOldMatches(): Promise<void> {
     const cutoffTime = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    
     console.log('Cleanup started for matches older than:', cutoffTime);
   }
 }
 
-export const matchManager = new MatchManager(); 
+export const matchManager = new MatchManager();

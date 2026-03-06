@@ -1,4 +1,4 @@
-import ChessEngine from '../../chess-engine';
+import { ChessEngine } from 'rook-zero';
 
 async function testCastling() {
   console.log('🔍 Testing Castling Specifically...\n');

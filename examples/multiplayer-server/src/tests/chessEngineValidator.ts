@@ -1,6 +1,5 @@
-import { ChessEngine } from '../../chess-engine/engine';
-import { PieceType, PieceColor } from '../../chess-engine/types';
-import { redisService } from '../services/redis';
+import { ChessEngine, PieceColor, PieceType } from 'rook-zero';
+import { redisService } from '../services/redis.service';
 
 interface TestPlayer {
   id: string;

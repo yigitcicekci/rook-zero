@@ -1,5 +1,5 @@
-import { redisService } from '../services/redis';
-import { matchManager } from '../services/matchManager';
+import { matchManager } from '../services/match-manager.service';
+import { redisService } from '../services/redis.service';
 
 async function runBasicTests() {
   console.log('🧪 Starting Basic Tests...\n');

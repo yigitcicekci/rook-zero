@@ -1,11 +1,6 @@
-import { Board, Move, MoveValidationResult, Piece, PieceColor, PieceType, Position, GameState, PIECE_VALIDATORS } from './types';
+import { Board, FlaggedMove, GameOverResult, GameState, Move, MoveValidationResult, Piece, PieceColor, PieceType, Position, PIECE_VALIDATORS } from './types';
 import { parseFEN, validateFEN, generateFEN } from './fen';
 import { findPiece } from './utils';
-
-interface FlaggedMove {
-  move: Move;
-  riskScore: number;
-}
 
 export class ChessEngine {
   private board: Board;
@@ -55,11 +50,7 @@ export class ChessEngine {
   }
 
   public makeMove(move: Move): boolean {
-    console.log(`DEBUG: makeMove called for ${move.from.row},${move.from.col} -> ${move.to.row},${move.to.col}`);
-    
     const validationResult = this.isMoveValid(move);
-    console.log(`DEBUG: Validation result: ${validationResult.valid}, Error: ${validationResult.error || 'None'}`);
-    
     if (!validationResult.valid) {
       return false;
     }
@@ -74,10 +65,7 @@ export class ChessEngine {
   }
 
   public getBoard(): Board {
-    console.log(`DEBUG: getBoard called - internal board.fen: "${this.board.fen}"`);
-    const result = { ...this.board, pieces: [...this.board.pieces] };
-    console.log(`DEBUG: getBoard returning - result.fen: "${result.fen}"`);
-    return result;
+    return { ...this.board, pieces: [...this.board.pieces] };
   }
 
   public getMoveHistory(): Move[] {
@@ -139,7 +127,7 @@ export class ChessEngine {
     return !this.hasLegalMoves(checkColor);
   }
 
-  public isGameOver(): { gameOver: boolean; result?: string; reason?: string } {
+  public isGameOver(): GameOverResult {
     const activeColor = this.gameState.activeColor;
     
     if (this.isCheckmate(activeColor)) {
@@ -275,11 +263,9 @@ export class ChessEngine {
     if (piece.type === PieceType.PAWN && move.isPromotion && move.promotionPiece) {
       piece.type = move.promotionPiece;
     }
-    
-    console.log(`DEBUG: Before FEN update - board.fen: "${this.board.fen}"`);
+
     this.board.fen = this.getFEN();
-    console.log(`DEBUG: After FEN update - board.fen: "${this.board.fen}"`);
-    
+
     return isCapture;
   }
 

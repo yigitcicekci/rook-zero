@@ -1,5 +1,5 @@
 import { Server as SocketIOServer, Socket } from 'socket.io';
-import { matchManager } from '../services/matchManager';
+import { matchManager } from '../services/match-manager.service';
 import { SocketEvents } from '../types/game';
 
 interface SocketWithPlayer extends Socket {

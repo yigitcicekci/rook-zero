@@ -1,5 +1,5 @@
 import { io, Socket } from 'socket.io-client';
-import { redisService } from '../services/redis';
+import { redisService } from '../services/redis.service';
 
 interface Player {
   id: string;

@@ -1,29 +1,30 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "ES2020",
     "module": "commonjs",
     "lib": ["ES2020"],
-    "rootDir": ".",
+    "rootDir": "../..",
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "declaration": true,
-    "declarationMap": true,
     "sourceMap": true,
-    "types": ["node", "jest"]
+    "paths": {
+      "rook-zero": ["../../src/index.ts"]
+    },
+    "types": ["node"]
   },
   "include": [
-    "src/index.ts",
-    "chess-engine/**/*"
+    "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
     "dist",
-    "examples",
-    "**/__tests__/**/*",
-    "**/*.test.ts"
+    "node_modules",
+    "src/tests/**/*",
+    "../../chess-engine/**/__tests__/**/*",
+    "../../chess-engine/**/*.test.ts"
   ]
 }
