@@ -20,6 +20,13 @@ export const isValidMove = (board: Board, move: Move): MoveValidationResult => {
     if (Math.abs(rowDiff) === 1) {
       const pieceAtTo = findPiece(board, to);
       if (!pieceAtTo) {
+        if ((move.piece.color === PieceColor.WHITE && to.row === 0) ||
+            (move.piece.color === PieceColor.BLACK && to.row === 7)) {
+          move.isPromotion = true;
+          if (!move.promotionPiece) {
+            move.promotionPiece = PieceType.QUEEN;
+          }
+        }
         return { valid: true };
       }
     } 
@@ -46,7 +53,7 @@ export const isValidMove = (board: Board, move: Move): MoveValidationResult => {
       return { valid: true };
     }
 
-    if (move.isEnPassant && board.enPassant) {
+    if (board.enPassant && board.enPassant !== '-') {
       const [file, rank] = board.enPassant.split('');
       const epCol = file.charCodeAt(0) - 'a'.charCodeAt(0);
       const epRow = 8 - parseInt(rank);
@@ -59,6 +66,7 @@ export const isValidMove = (board: Board, move: Move): MoveValidationResult => {
             capturedPawn.type === PieceType.PAWN && 
             capturedPawn.color !== move.piece.color) {
           move.isCapture = true;
+          move.isEnPassant = true;
           return { valid: true };
         }
       }

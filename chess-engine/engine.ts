@@ -250,14 +250,31 @@ export class ChessEngine {
 
   private applyMove(move: Move, piece: Piece): boolean {
     const targetPiece = findPiece(this.board, move.to);
-    const isCapture = !!targetPiece;
+    let isCapture = !!targetPiece;
     
-    if (isCapture) {
+    if (move.isEnPassant && this.board.enPassant && this.board.enPassant !== '-') {
+      const capturedPawnRow = move.from.row;
+      const capturedPawn = findPiece(this.board, { row: capturedPawnRow, col: move.to.col });
+      
+      if (capturedPawn && capturedPawn.type === PieceType.PAWN && capturedPawn.color !== piece.color) {
+        this.removePiece({ row: capturedPawnRow, col: move.to.col });
+        isCapture = true;
+        move.isCapture = true;
+      }
+    } else if (isCapture) {
       this.removePiece(move.to);
       move.isCapture = true;
     }
 
+    if (move.isCastling && piece.type === PieceType.KING) {
+      this.executeCastling(move, piece);
+    }
+
     piece.position = { ...move.to };
+    
+    if (piece.type === PieceType.PAWN && move.isPromotion && move.promotionPiece) {
+      piece.type = move.promotionPiece;
+    }
     
     console.log(`DEBUG: Before FEN update - board.fen: "${this.board.fen}"`);
     this.board.fen = this.getFEN();
@@ -279,6 +296,78 @@ export class ChessEngine {
       this.gameState.halfMoves = 0;
     } else {
       this.gameState.halfMoves++;
+    }
+
+    this.updateEnPassantTarget(move, piece);
+    this.updateCastlingRights(move, piece);
+  }
+
+  private updateEnPassantTarget(move: Move, piece: Piece): void {
+    if (piece.type !== PieceType.PAWN) {
+      this.gameState.enPassant = '-';
+      this.board.enPassant = undefined;
+      return;
+    }
+
+    const rowDiff = Math.abs(move.to.row - move.from.row);
+    const colDiff = Math.abs(move.to.col - move.from.col);
+    
+    if (rowDiff === 2 && colDiff === 0) {
+      const direction = piece.color === PieceColor.WHITE ? -1 : 1;
+      const enPassantRow = move.from.row + direction;
+      const enPassantCol = move.from.col;
+      const file = String.fromCharCode('a'.charCodeAt(0) + enPassantCol);
+      const rank = 8 - enPassantRow;
+      this.gameState.enPassant = `${file}${rank}`;
+      this.board.enPassant = this.gameState.enPassant;
+    } else {
+      this.gameState.enPassant = '-';
+      this.board.enPassant = undefined;
+    }
+  }
+
+  private updateCastlingRights(move: Move, piece: Piece): void {
+    let castlingRights = this.gameState.castlingRights;
+    if (castlingRights === '-') {
+      return;
+    }
+
+    if (piece.type === PieceType.KING) {
+      if (piece.color === PieceColor.WHITE) {
+        castlingRights = castlingRights.replace(/[KQ]/g, '');
+      } else {
+        castlingRights = castlingRights.replace(/[kq]/g, '');
+      }
+    } else if (piece.type === PieceType.ROOK) {
+      if (piece.color === PieceColor.WHITE) {
+        if (move.from.col === 0) {
+          castlingRights = castlingRights.replace('Q', '');
+        } else if (move.from.col === 7) { 
+          castlingRights = castlingRights.replace('K', '');
+        }
+      } else {
+        if (move.from.col === 0) { 
+          castlingRights = castlingRights.replace('q', '');
+        } else if (move.from.col === 7) {
+          castlingRights = castlingRights.replace('k', '');
+        }
+      }
+    }
+
+    if (castlingRights === '') {
+      castlingRights = '-';
+    }
+
+    this.gameState.castlingRights = castlingRights;
+  }
+
+  private executeCastling(move: Move, king: Piece): void {
+    const isKingside = move.to.col > move.from.col;
+    const rookFromCol = isKingside ? 7 : 0;
+    const rookToCol = isKingside ? move.to.col - 1 : move.to.col + 1;
+    const rook = findPiece(this.board, { row: move.from.row, col: rookFromCol });
+    if (rook && rook.type === PieceType.ROOK && rook.color === king.color) {
+      rook.position = { row: move.from.row, col: rookToCol };
     }
   }
 

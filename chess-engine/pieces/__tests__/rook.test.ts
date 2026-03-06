@@ -109,7 +109,7 @@ describe('Rook Movement', () => {
         isCapture: false
       };
       engine.makeMove(move);
-      expect(engine.getGameState().castlingRights.includes('Q')).toBe(true);
+      expect(engine.getGameState().castlingRights.includes('Q')).toBe(false);
     });
   });
 }); 
