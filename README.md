@@ -1,296 +1,423 @@
-# Chess Engine Test Suite
+# ♜ RookZero
 
-## 🚀 Özellikler
+**RookZero** is a high-performance chess engine and real-time multiplayer backend written in **TypeScript**.
 
-- **Gerçek Zamanlı Çoklu Oyuncu**: Socket.IO ile anlık çoklu oyuncu satranç
-- **Redis Entegrasyonu**: Maç ve oyuncu durumlarının Redis'te saklanması
-- **Gelişmiş Satranç Motoru**: Pin tespiti, en passant, rok gibi gelişmiş satranç kuralları
-- **Kapsamlı Test Sistemi**: 96+ test ile eksiksiz satranç mantığı doğrulaması
-- **Performans Analizi**: Detaylı performans metrikleri ve zamanlama analizi
-- **Oyun Simülasyonu**: Otomatik oyun simülasyonu ve test araçları
-- **Docker Desteği**: Docker ve Docker Compose desteği
+It provides a fully validated chess rules engine with **real-time gameplay**, **Redis state management**, and an extensive **automated testing suite**.
 
-## 📋 Gereksinimler
+The project focuses on **correct chess logic, performance, and multiplayer synchronization**.
+
+---
+
+# 🚀 Features
+
+- ♟ **Advanced Chess Engine**
+  - Full chess rule validation
+  - Pin detection
+  - Castling
+  - En passant
+  - Pawn promotion
+  - Check / checkmate detection
+  - FEN notation support
+
+- 🌐 **Real-Time Multiplayer**
+  - Built with **Socket.IO**
+  - Instant move synchronization
+
+- 🧠 **Robust Game Logic**
+  - Move validation system
+  - Turn management
+  - Illegal move prevention
+
+- ⚡ **High Performance**
+  - Sub-millisecond move validation
+  - Optimized board state tracking
+
+- 📦 **Redis Integration**
+  - Match state persistence
+  - Player state management
+
+- 🧪 **Comprehensive Test Suite**
+  - 96+ automated tests
+  - Simulation tools
+  - Performance benchmarks
+
+- 🐳 **Docker Support**
+  - Docker
+  - Docker Compose
+
+---
+
+# 📋 Requirements
 
 - Node.js 18+
 - Redis 7+
 - TypeScript 4.9+
-- Jest (testing framework)
-- Docker & Docker Compose (opsiyonel)
+- Jest
+- Docker (optional)
 
-## 🛠️ Kurulum
+---
 
-### Local Kurulum
+# 🛠 Installation
 
-1. Dependencies'leri kurun:
+## Local Setup
+
+Install dependencies:
+
 ```bash
 npm install
 ```
 
-2. Redis'i başlatın:
+Start Redis:
+
 ```bash
 redis-server
 ```
 
-3. Uygulamayı build edin:
+Build the project:
+
 ```bash
 npm run build
 ```
 
-4. Development mode'da çalıştırın:
+Run in development mode:
+
 ```bash
 npm run dev
 ```
 
-### Docker ile Kurulum
+---
+
+## Docker Setup
 
 ```bash
 npm run docker:up
 npm run docker:down
 ```
 
-## 🧪 Test Suite
+---
 
-### Test Türleri ve Açıklamaları
+# 🧪 Test Suite
 
-#### 1. Simülasyon Test Paketleri
-```bash
-npm run test:all  # Tüm testleri çalıştır
+RookZero includes a **comprehensive testing system** that validates chess logic, system behavior, and real-world gameplay scenarios.
+
+---
+
+# Chess Engine Tests
+
+Location:
+
+```
+chess-engine/__tests__/
 ```
 
-**11 Test Paketi İçerir:**
+### Engine Tests
+- Engine initialization
+- Game state management
+- FEN parsing
+- Move validation
 
-##### Satranç Motoru Testleri (`chess-engine/__tests__/`)
+### Piece Movement Tests
 
-- **Motor Testleri** (`engine.test.ts`)
-  - ChessEngine yapıcı doğrulaması
-  - Oyun durumu yönetimi
-  - FEN notasyonu ayrıştırması
-  - Temel hamle doğrulaması
+- Knight movement validation
+- Queen diagonal/linear movement
+- King movement and castling
+- Rook linear movement
+- Bishop diagonal movement
+- Pawn movement and captures
 
-- **Taş Hareketi Testleri**
-  - `knight.test.ts`: At'ın L-şeklinde hareket doğrulaması
-  - `queen.test.ts`: Vezir'in çapraz/düz hareket testi
-  - `king.test.ts`: Şah hareketi + rok mantığı
-  - `rook.test.ts`: Kale'nin düz çizgi hareketi
-  - `bishop.test.ts`: Fil'in çapraz hareket testi
-  - `pawn.test.ts`: Piyon ileri/yakalama/en passant testleri
+### Special Rules
 
-- **Özel Kurallar Testleri** (`special-rules.test.ts`)
-  - Rok (kısa/uzun rok)
-  - En passant yakalama
-  - Piyon terfi etme
-  - Şah/mat tespiti
+- Castling (short & long)
+- En passant
+- Pawn promotion
+- Check & checkmate detection
 
-- **Kritik Satranç Mantığı** (`critical-chess-logic.test.ts`)
-  - Pin tespiti (şah tehlikesine neden olan taşların hareketi engellenir)
-  - Şah güvenliği doğrulaması
-  - Karmaşık tahta senaryoları
+### Critical Chess Logic
 
-- **Maç Senaryoları** (`match-scenarios.test.ts`)
-  - Gerçek oyun durumu testleri
-  - Çoklu hamle dizileri
+- Pin detection
+- King safety validation
+- Complex board state scenarios
 
-#### 2. Performans ve Entegrasyon Testleri
+### Match Scenarios
 
-##### Temel Test Paketi
+- Real match simulations
+- Multi-move sequences
+
+---
+
+# Integration & Performance Tests
+
+## Run All Simulation Tests
+
+```bash
+npm run test:all
+```
+
+---
+
+## Basic System Tests
+
 ```bash
 npx ts-node src/tests/basicTest.ts
 ```
 
-**Test Edilen Fonksiyonlar:**
-- ✅ Redis bağlantısı (ping/pong)
-- ✅ Maç oluşturma (UUID üretimi)
-- ✅ Oyuncu katılımı (beyaz/siyah atama)
-- ✅ Hamle doğrulaması (e2-e4 piyon hamlesi)
-- ✅ Sistem istatistikleri (maç sayıları)
-- ✅ Temizlik işlemleri (maç silme)
+Tests include:
 
+- Redis connectivity
+- Match creation
+- Player joining
+- Move validation
+- System statistics
+- Match cleanup
 
-##### Chess Engine Validator
+---
+
+## Chess Engine Validator
+
 ```bash
 npx ts-node src/tests/chessEngineValidator.ts
 ```
 
-**Gelişmiş Performans Analizi:**
-- Bireysel hamle zamanlaması (doğrulama vs yürütme)
-- Satranç mantığı uç durum testleri
-- FEN notasyonu tutarlılığı
-- Sıra yönetimi doğrulaması
+Validates:
 
-##### X&Y Kullanıcı Kapsamlı Testi
+- Move execution timing
+- Chess rule edge cases
+- FEN consistency
+- Turn management
+
+---
+
+## Multiplayer Simulation Test
+
 ```bash
 npm run test:xy-users
 ```
 
-**Gerçek Dünya Senaryosu Testleri:**
-- Socket bağlantısı kurulumu
-- Maç oluşturma ve katılma akışı
-- İtalyan Oyunu açılış hamleleri (e4, e5, Nf3, Nc6, Bc4, Be7, O-O)
-- Uç durumlar (geçersiz hamleler, yanlış sıralar)
-- Oyuncu bağlantı kesme/yeniden bağlanma senaryoları
-- Yük altında performans
+Simulates real gameplay scenarios:
 
-##### Interactive Chess Test
+- Socket connection setup
+- Match creation / join flow
+- Opening sequences (Italian Game)
+- Invalid move handling
+- Player disconnect/reconnect
+- Load testing
+
+---
+
+## Interactive Chess Test
+
 ```bash
 npx ts-node src/tests/interactiveChessTest.ts
 ```
 
-**Çift Modlu Test Sistemi:**
-- **Mod 1**: Yerel Motor (tek terminal, 2 oyuncu sırayla)
-- **Mod 2**: Ağ Çoklu Oyuncu (Redis/Socket.IO ile 2 istemci)
+### Modes
 
-**Özellikler:**
-- 🎮 İki oyuncu birbirine karşı oynayabilir
-- 🕹️ ASCII tahta gösterimi ile gerçek zamanlı hamle girişi
-- ⏱️ Canlı performans metrikleri (doğrulama/yürütme zamanlaması)
-- 📊 Kapsamlı hata takibi ve analizi
-- 🎯 Üretim ortamı simülasyonu
-- 📈 Başarı oranı izleme
-- 🌐 Socket.IO entegrasyonu ve FEN ayrıştırması
+**Mode 1**
 
-**Kullanılabilir Komutlar:**
+Local engine (two players on one terminal)
+
+**Mode 2**
+
+Network multiplayer using:
+- Redis
+- Socket.IO
+
+### Features
+
+- ASCII chess board
+- Real-time move input
+- Live performance metrics
+- Error tracking
+- Production simulation
+
+Example commands:
+
 ```
-🎯 Player 1 (white), your move: e2-e4    # Make a move
-🎯 Player 1 (white), your move: stats    # Show performance stats
-🎯 Player 1 (white), your move: board    # Redraw board
-🎯 Player 1 (white), your move: history  # Show move history
-🎯 Player 1 (white), your move: help     # Show commands
-🎯 Player 1 (white), your move: quit     # Exit game
+e2-e4    -> make a move
+stats    -> performance stats
+board    -> redraw board
+history  -> move history
+help     -> show commands
+quit     -> exit game
 ```
 
-### Test Yürütme Sırası
+---
+
+# 🎮 Usage
+
+## Start Server
+
+Development:
+
 ```bash
-npm run test:all                              # Simülasyon testleri için
-npm test                                      # Jest paketi (96 test)
-npx ts-node src/tests/basicTest.ts           # Temel fonksiyonalite
-npx ts-node src/tests/chessEngineValidator.ts # Satranç mantığı doğrulaması
-npm run test:xy-users                        # Entegrasyon testi
-npx ts-node src/tests/interactiveChessTest.ts # Etkileşimli oyun testi
-```
-
-## 🎮 Kullanım
-
-### Server Başlatma
-
-```bash
-# Development
 npm run dev
+```
 
-# Production  
+Production:
+
+```bash
 npm start
 ```
 
-Server `http://localhost:3001` adresinde çalışacaktır.
-
-### API Uç Noktaları
-- `GET /api/stats` - Sistem istatistikleri (maçlar, oyuncular)
-- `GET /api/matches/pending` - Bekleyen maçlar
-- `GET /api/matches/:matchId` - Maç detayları
-
-### Socket.IO Events
-
-#### İstemciden Sunucuya
-- `identify` - Oyuncu kimlik doğrulaması
-- `create_match` - Yeni maç oluşturma
-- `join_match` - Maça katılma
-- `make_move` - Hamle yapma
-- `resign` - Oyundan çekilme
-
-#### Sunucudan İstemciye
-- `match_created` - Yeni maç oluşturuldu
-- `match_started` - Maç başladı
-- `move_made` - Hamle yapıldı
-- `player_joined` - Oyuncu katıldı
-- `game_over` - Oyun bitti
-
-## 📊 Performans Metrikleri
-
-### Satranç Motoru Performansı
-- **Milisaniye Altı**: Ortalama hamle işleme süresi (0.40-1.50ms)
-- **Pin Tespiti**: Şahı tehlikeye atan geçersiz hamleleri engeller
-- **Bellek Verimli**: 32 taş takip sistemi
-- **FEN Uyumlu**: Standart satranç notasyonu desteği
-- **Mat Tespiti**: Otomatik şah/mat/pat durumu algılama
-
-### Sistem Performansı
-- **Redis İşlemleri**: ~7ms bağlantı süresi
-- **Socket Bağlantıları**: ~6.54ms ortalama
-- **Hamle Doğrulaması**: ~0.17ms ortalama
-- **Ağ Gecikmesi**: ~1000ms simüle edilmiş gerçekçi gecikmeler
-
-### Başarı Oranları
-- **Hamle Başarı Oranı**: %75 (geçersiz hamleler için beklenen başarısızlıklar)
-- **Bağlantı Güvenilirliği**: Test senaryolarında %100
-- **Sıra Yönetimi**: %100 doğruluk
-
-## 🏗️ Proje Yapısı
+Server runs at:
 
 ```
-├── src/
-│   ├── services/
-│   │   ├── redis.ts          # Redis servisi (bağlantı yönetimi)
-│   │   └── matchManager.ts   # Maç yaşam döngüsü yönetimi
-│   ├── socket/
-│   │   └── socketHandler.ts  # Socket.IO olay işleyicisi
-│   ├── types/
-│   │   └── game.ts          # TypeScript tip tanımları
-│   ├── tests/
-│   │   ├── basicTest.ts     # Temel fonksiyonalite testleri
-│   │   ├── chessEngineValidator.ts  # Satranç mantığı doğrulaması
-│   │   ├── xyUserTest.ts    # Entegrasyon ve kullanıcı simülasyonu
-│   │   └── interactiveChessTest.ts  # Etkileşimli test sistemi
-│   └── server.ts            # Express + Socket.IO sunucusu
-├── chess-engine/            # Satranç motoru implementasyonu
-│   ├── engine.ts            # Ana motor sınıfı
-│   ├── pieces/             # Taş hareket mantığı
-│   └── __tests__/          # Jest test dosyaları
-├── docker-compose.yml       # Docker compose yapılandırması
-├── Dockerfile              # Docker image yapılandırması
-└── package.json
+http://localhost:3001
 ```
 
-## 🔧 Environment Variables
+---
 
-```bash
+# 📡 API Endpoints
+
+### System Stats
+
+```
+GET /api/stats
+```
+
+Returns match and player statistics.
+
+### Pending Matches
+
+```
+GET /api/matches/pending
+```
+
+### Match Details
+
+```
+GET /api/matches/:matchId
+```
+
+---
+
+# 🔌 Socket.IO Events
+
+## Client → Server
+
+- `identify`
+- `create_match`
+- `join_match`
+- `make_move`
+- `resign`
+
+## Server → Client
+
+- `match_created`
+- `match_started`
+- `move_made`
+- `player_joined`
+- `game_over`
+
+---
+
+# ⚡ Performance Metrics
+
+## Chess Engine
+
+- Move processing: **0.40ms – 1.50ms**
+- Move validation: **~0.17ms**
+- Pin detection prevents illegal moves exposing the king
+- Memory-efficient **32-piece tracking system**
+- Full **FEN compatibility**
+
+---
+
+## System Performance
+
+- Redis connection: ~7ms
+- Socket connection: ~6.5ms
+- Network latency simulation: ~1000ms
+
+---
+
+# 📊 Test Results
+
+Latest run:
+
+- ✅ **96 / 96 Jest Tests Passed**
+- ✅ Integration Tests Passed
+- ✅ Chess Logic Fully Validated
+- ✅ Performance Targets Met
+- ✅ No Linter Errors
+
+---
+
+# 🏗 Project Structure
+
+```
+src
+ ├── services
+ │   ├── redis.ts
+ │   └── matchManager.ts
+ │
+ ├── socket
+ │   └── socketHandler.ts
+ │
+ ├── types
+ │   └── game.ts
+ │
+ ├── tests
+ │   ├── basicTest.ts
+ │   ├── chessEngineValidator.ts
+ │   ├── xyUserTest.ts
+ │   └── interactiveChessTest.ts
+ │
+ └── server.ts
+
+chess-engine
+ ├── engine.ts
+ ├── pieces
+ └── __tests__
+
+docker-compose.yml
+Dockerfile
+package.json
+```
+
+---
+
+# ⚙ Environment Variables
+
+```
 NODE_ENV=development
 PORT=3000
 REDIS_URL=redis://localhost:6379
 CORS_ORIGIN=*
 ```
 
-## 🚀 Deployment
+---
 
-### Docker Production
+# 🚀 Deployment
 
 ```bash
-docker-compose -f docker-compose.yml up -d
+docker-compose up -d
 ```
 
-### Yaygın Sorunlar
+---
 
-1. **Port Zaten Kullanımda**
-   ```bash
-   lsof -ti:3000 | xargs kill -9
-   ```
+# 🛠 Troubleshooting
 
-2. **Redis Bellek Dolu**
-   ```bash
-   redis-cli FLUSHALL
-   ```
+### Port Already In Use
 
-3. **TypeScript Derleme Hataları**
-   ```bash
-   npx tsc --noEmit
-   ```
+```bash
+lsof -ti:3000 | xargs kill -9
+```
 
-## 📈 Test Sonuçları Özeti
+### Redis Memory Full
 
-### Son Test Çalıştırma Sonuçları:
-- ✅ **96/96 Jest Testi Başarılı**
-- ✅ **Tüm Entegrasyon Testleri Başarılı**
-- ✅ **Performans Kriterlerini Karşılıyor**
-- ✅ **Satranç Mantığı Doğrulaması Tamamlandı**
-- ✅ **Linter Hatası Yok**
+```bash
+redis-cli FLUSHALL
+```
+
+### TypeScript Errors
+
+```bash
+npx tsc --noEmit
+```
+
+---
+
+✅ **RookZero aims to provide a reliable, high-performance foundation for chess applications and multiplayer chess systems.**
 
 
