@@ -3,7 +3,7 @@
 This is a static, frontend-only demo application showcasing the capabilities of the `@yigitcicekci/rook-zero` chess engine and rules library.
 
 ## Features Showcased
-- **Interactive Playground**: A playable chessboard synced with `RkEngine` state.
+- **Interactive Playground**: A playable chessboard synced with `RZero` state.
 - **Move Validation**: Input SAN or UCI moves and receive strict feedback.
 - **State Detection**: Real-time detection of Checkmate, Stalemate, Draws, and Checks.
 - **Notation Output**: View real-time FEN and PGN generation.

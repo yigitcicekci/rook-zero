@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { RkEngine } from '@yigitcicekci/rook-zero';
+import { RZero } from '@yigitcicekci/rook-zero';
 import type { Square, MoveInput } from '@yigitcicekci/rook-zero';
 import { Chessboard } from '../components/Chessboard';
 import { cn } from '../lib/utils';
@@ -13,7 +13,7 @@ interface Preset {
 }
 
 const PRESETS: Preset[] = [
-  { nameKey: 'Start Position', fen: RkEngine.DEFAULT_FEN },
+  { nameKey: 'Start Position', fen: RZero.DEFAULT_FEN },
   { nameKey: 'Checkmate', fen: 'r1bqkb1r/pppp1Qpp/2n2n2/4p3/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4' },
   { nameKey: 'Stalemate', fen: '4k3/4P3/4K3/8/8/8/8/8 b - - 0 1' },
   { nameKey: 'Promotion', fen: '8/P7/8/8/8/8/8/4k2K w - - 0 1' },
@@ -23,7 +23,7 @@ const PRESETS: Preset[] = [
 
 export function Playground({ lang }: { lang: Lang }) {
   const text = t[lang].playground;
-  const [engine] = useState(() => new RkEngine());
+  const [engine] = useState(() => new RZero());
 
   const [gameState, setGameState] = useState(() => ({
     fen: engine.fen(),

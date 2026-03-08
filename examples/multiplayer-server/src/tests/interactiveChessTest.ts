@@ -1,6 +1,6 @@
 import readline from 'readline';
 import { io, Socket } from 'socket.io-client';
-import { DEFAULT_FEN, RkEngine, type Color, type Square } from '../lib/rook-zero';
+import { DEFAULT_FEN, RZero, type Color, type Square } from '../lib/rook-zero';
 
 interface Player {
   id: string;
@@ -70,7 +70,7 @@ export class InteractiveChessTest {
     errorsByType: {}
   };
   private readonly attempts: MoveAttempt[] = [];
-  private engine = new RkEngine(DEFAULT_FEN);
+  private engine = new RZero(DEFAULT_FEN);
   private currentPlayer = this.players[0];
   private isMultiplayer = false;
   private matchId?: string;
@@ -99,7 +99,7 @@ export class InteractiveChessTest {
   }
 
   private async startLocalMode(): Promise<void> {
-    this.engine = new RkEngine(DEFAULT_FEN);
+    this.engine = new RZero(DEFAULT_FEN);
     await this.setupPlayerNames();
     this.syncCurrentPlayer();
     this.displayBoard();

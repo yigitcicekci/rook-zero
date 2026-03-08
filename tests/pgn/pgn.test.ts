@@ -1,19 +1,19 @@
-import { RkEngine } from '../../src';
+import { RZero } from '../../src';
 
 describe('PGN', () => {
   it('exports and imports simple PGN sequences', () => {
-    const rkengine = new RkEngine();
+    const rzero = new RZero();
 
-    rkengine.move('e4');
-    rkengine.move('e5');
-    rkengine.move('Nf3');
-    rkengine.move('Nc6');
-    rkengine.move('Bb5');
+    rzero.move('e4');
+    rzero.move('e5');
+    rzero.move('Nf3');
+    rzero.move('Nc6');
+    rzero.move('Bb5');
 
-    expect(rkengine.pgn()).toBe('1. e4 e5 2. Nf3 Nc6 3. Bb5 *');
+    expect(rzero.pgn()).toBe('1. e4 e5 2. Nf3 Nc6 3. Bb5 *');
 
-    const replay = new RkEngine();
+    const replay = new RZero();
     expect(replay.loadPgn('1. e4 e5 2. Nf3 Nc6 3. Bb5 *')).toBe(true);
-    expect(replay.fen()).toBe(rkengine.fen());
+    expect(replay.fen()).toBe(rzero.fen());
   });
 });

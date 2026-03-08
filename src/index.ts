@@ -1,4 +1,4 @@
-export { RkEngine, DEFAULT_FEN } from './core/chess';
+export { RZero, DEFAULT_FEN } from './core/chess';
 export { validateFen } from './notation/fen';
 export { formatUci, parseUci } from './notation/uci';
 export { normalizeSan } from './notation/san';

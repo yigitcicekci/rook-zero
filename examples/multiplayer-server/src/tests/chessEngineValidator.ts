@@ -1,4 +1,4 @@
-import { RkEngine } from '../lib/rook-zero';
+import { RZero } from '../lib/rook-zero';
 
 interface MoveMetric {
   input: string;
@@ -6,7 +6,7 @@ interface MoveMetric {
 }
 
 export class ChessEngineValidator {
-  private readonly rkengine = new RkEngine();
+  private readonly rzero = new RZero();
   private readonly metrics: MoveMetric[] = [];
 
   async runFullValidation(): Promise<void> {
@@ -23,15 +23,15 @@ export class ChessEngineValidator {
 
   private checkInitialState(): void {
     console.log('1️⃣ Initial state');
-    console.log(`   - FEN: ${this.rkengine.fen()}`);
-    console.log(`   - Turn: ${this.rkengine.turn()}`);
-    console.log(`   - Legal moves: ${this.rkengine.moves().length}`);
+    console.log(`   - FEN: ${this.rzero.fen()}`);
+    console.log(`   - Turn: ${this.rzero.turn()}`);
+    console.log(`   - Legal moves: ${this.rzero.moves().length}`);
 
-    if (this.rkengine.moves().length !== 20) {
+    if (this.rzero.moves().length !== 20) {
       throw new Error('Expected 20 legal moves in the starting position');
     }
 
-    if (this.rkengine.turn() !== 'w') {
+    if (this.rzero.turn() !== 'w') {
       throw new Error('Expected white to move first');
     }
 
@@ -46,12 +46,12 @@ export class ChessEngineValidator {
     this.recordMove('Nc6');
     this.recordMove('Bc4');
 
-    const invalidBackwardPawn = this.rkengine.validateMove({ from: 'e5', to: 'e6' });
+    const invalidBackwardPawn = this.rzero.validateMove({ from: 'e5', to: 'e6' });
     if (invalidBackwardPawn.ok) {
       throw new Error('Expected invalid pawn move to fail');
     }
 
-    const wrongTurn = this.rkengine.validateMove({ from: 'd2', to: 'd4' });
+    const wrongTurn = this.rzero.validateMove({ from: 'd2', to: 'd4' });
     if (wrongTurn.ok || wrongTurn.reason !== 'wrong-turn') {
       throw new Error(`Expected wrong-turn, received ${wrongTurn.ok ? 'ok' : wrongTurn.reason}`);
     }
@@ -63,23 +63,23 @@ export class ChessEngineValidator {
 
   private checkUndoRedoAndHistory(): void {
     console.log('3️⃣ Undo / redo / history');
-    const beforeUndo = this.rkengine.fen();
-    const undone = this.rkengine.undo();
+    const beforeUndo = this.rzero.fen();
+    const undone = this.rzero.undo();
     if (!undone || undone.san !== 'Bc4') {
       throw new Error('Expected Bc4 to be undone');
     }
 
-    const redone = this.rkengine.redo();
+    const redone = this.rzero.redo();
     if (!redone || redone.san !== 'Bc4') {
       throw new Error('Expected Bc4 to be redone');
     }
 
-    const history = this.rkengine.history() as string[];
+    const history = this.rzero.history() as string[];
     if (history.join(' ') !== 'e4 e5 Nf3 Nc6 Bc4') {
       throw new Error(`Unexpected history: ${history.join(' ')}`);
     }
 
-    if (beforeUndo !== this.rkengine.fen()) {
+    if (beforeUndo !== this.rzero.fen()) {
       throw new Error('Undo/redo should restore the same FEN');
     }
 
@@ -89,25 +89,25 @@ export class ChessEngineValidator {
 
   private checkNotationAndFen(): void {
     console.log('4️⃣ Notation and FEN');
-    const fen = this.rkengine.fen();
-    const pgn = this.rkengine.pgn();
-    const cloned = new RkEngine();
+    const fen = this.rzero.fen();
+    const pgn = this.rzero.pgn();
+    const cloned = new RZero();
     const loadedFen = cloned.loadFen(fen);
 
     if (!loadedFen.ok) {
       throw new Error(`Expected FEN to load, received ${loadedFen.reason}`);
     }
 
-    const fromPgn = new RkEngine();
+    const fromPgn = new RZero();
     if (!fromPgn.loadPgn(pgn)) {
       throw new Error('Expected PGN import to succeed');
     }
 
-    if (fromPgn.fen() !== this.rkengine.fen()) {
+    if (fromPgn.fen() !== this.rzero.fen()) {
       throw new Error('PGN roundtrip did not restore the same position');
     }
 
-    const invalidFen = RkEngine.validateFen('8/8/8/8/8/8/8/8 w - - 0 1');
+    const invalidFen = RZero.validateFen('8/8/8/8/8/8/8/8 w - - 0 1');
     if (invalidFen.ok || invalidFen.reason !== 'missing-king') {
       throw new Error(`Expected missing-king, received ${invalidFen.ok ? 'ok' : invalidFen.reason}`);
     }
@@ -120,7 +120,7 @@ export class ChessEngineValidator {
 
   private checkDrawStates(): void {
     console.log('5️⃣ Draw state detection');
-    const repetition = new RkEngine();
+    const repetition = new RZero();
     for (const move of ['Nf3', 'Nf6', 'Ng1', 'Ng8', 'Nf3', 'Nf6', 'Ng1', 'Ng8']) {
       if (!repetition.move(move)) {
         throw new Error(`Expected repetition move ${move} to succeed`);
@@ -131,7 +131,7 @@ export class ChessEngineValidator {
       throw new Error('Expected threefold repetition');
     }
 
-    const insufficient = new RkEngine('8/8/8/8/8/8/8/K1k5 w - - 0 1');
+    const insufficient = new RZero('8/8/8/8/8/8/8/K1k5 w - - 0 1');
     if (!insufficient.isInsufficientMaterial()) {
       throw new Error('Expected insufficient material');
     }
@@ -143,7 +143,7 @@ export class ChessEngineValidator {
 
   private checkPerft(): void {
     console.log('6️⃣ Perft');
-    const perft = new RkEngine();
+    const perft = new RZero();
     const depth1 = perft.perft(1);
     const depth2 = perft.perft(2);
 
@@ -158,7 +158,7 @@ export class ChessEngineValidator {
 
   private recordMove(input: string): void {
     const start = performance.now();
-    const move = this.rkengine.move(input);
+    const move = this.rzero.move(input);
     const duration = performance.now() - start;
 
     if (!move) {
@@ -176,7 +176,7 @@ export class ChessEngineValidator {
     console.log('📊 Summary');
     console.log(`   - Moves measured: ${this.metrics.length}`);
     console.log(`   - Average move time: ${average.toFixed(2)}ms`);
-    console.log(`   - Final FEN: ${this.rkengine.fen()}`);
+    console.log(`   - Final FEN: ${this.rzero.fen()}`);
   }
 }
 

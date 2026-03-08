@@ -3,9 +3,9 @@ import { cn } from '../lib/utils';
 import { t, type Lang } from '../lib/i18n';
 
 const CODES: Record<string, string> = {
-  init: `import { RkEngine } from '@yigitcicekci/rook-zero';
+  init: `import { RZero } from '@yigitcicekci/rook-zero';
 
-const engine = new RkEngine();
+const engine = new RZero();
 
 // Play moves using standard notation
 engine.move('e4');
@@ -16,7 +16,7 @@ engine.move('Nf3');
 console.log(engine.isCheck()); // false
 console.log(engine.fen()); // Current FEN string
 `,
-  validate: `import { RkEngine, validateFen } from '@yigitcicekci/rook-zero';
+  validate: `import { RZero, validateFen } from '@yigitcicekci/rook-zero';
 
 // Validate FEN string directly
 const fenResult = validateFen('invalid_fen_string');
@@ -24,7 +24,7 @@ if (!fenResult.ok) {
   console.log('Error:', fenResult.reason); // e.g. 'invalid-fen'
 }
 
-const engine = new RkEngine();
+const engine = new RZero();
 const moveResult = engine.validateMove('Qxe8');
 if (!moveResult.ok) {
   console.log(moveResult.reason); // e.g. 'illegal-piece-move'

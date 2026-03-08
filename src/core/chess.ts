@@ -144,7 +144,7 @@ function isValidPromotionPiece(value: PromotionPiece | undefined): boolean {
   return value == null || ['q', 'r', 'b', 'n'].includes(value);
 }
 
-export class RkEngine {
+export class RZero {
   private board = createEmptyBoard();
   private turnColor: Color = 'w';
   private castling = CASTLE_WHITE_K | CASTLE_WHITE_Q | CASTLE_BLACK_K | CASTLE_BLACK_Q;
@@ -167,11 +167,11 @@ export class RkEngine {
   }
 
   public static validateFen(fen: string): PositionValidationResult {
-    const parsed = RkEngine.parseFen(fen);
+    const parsed = RZero.parseFen(fen);
     if (!parsed.ok) {
       return parsed;
     }
-    return RkEngine.fromState(parsed.state).validateCurrentPosition();
+    return RZero.fromState(parsed.state).validateCurrentPosition();
   }
 
   public fen(): string {
@@ -179,12 +179,12 @@ export class RkEngine {
   }
 
   public loadFen(fen: string): PositionValidationResult {
-    const parsed = RkEngine.parseFen(fen);
+    const parsed = RZero.parseFen(fen);
     if (!parsed.ok) {
       return parsed;
     }
 
-    const validator = RkEngine.fromState(parsed.state);
+    const validator = RZero.fromState(parsed.state);
     const validation = validator.validateCurrentPosition();
     if (!validation.ok) {
       return validation;
@@ -198,7 +198,7 @@ export class RkEngine {
   }
 
   public validatePosition(fen: string = this.fen()): PositionValidationResult {
-    return RkEngine.validateFen(fen);
+    return RZero.validateFen(fen);
   }
 
   public reset(): void {
@@ -566,8 +566,8 @@ export class RkEngine {
     };
   }
 
-  private static fromState(state: ParsedState): RkEngine {
-    const chess = Object.create(RkEngine.prototype) as RkEngine;
+  private static fromState(state: ParsedState): RZero {
+    const chess = Object.create(RZero.prototype) as RZero;
     chess.board = createEmptyBoard();
     chess.turnColor = state.turn;
     chess.castling = state.castling;

@@ -39,7 +39,7 @@ It is built for developers who need a clean chess rules core without backend-spe
 
 ## Features
 
-- `RkEngine` public API
+- `RZero` public API
 - legal move generation
 - strict move validation
 - strict FEN validation
@@ -84,17 +84,17 @@ npm install @yigitcicekci/rook-zero
 ### Basic gameplay
 
 ```ts
-import { RkEngine } from '@yigitcicekci/rook-zero';
+import { RZero } from '@yigitcicekci/rook-zero';
 
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-rkengine.move('e4');
-rkengine.move('e7e5');
-rkengine.move({ from: 'g1', to: 'f3' });
+rzero.move('e4');
+rzero.move('e7e5');
+rzero.move({ from: 'g1', to: 'f3' });
 
-console.log(rkengine.fen());
-console.log(rkengine.moves());
-console.log(rkengine.history());
+console.log(rzero.fen());
+console.log(rzero.moves());
+console.log(rzero.history());
 ```
 
 ### Elo calculation
@@ -152,9 +152,9 @@ It is especially useful when you want a library that is centered on:
 
 Rook Zero revolves around a single main class:
 
-- `RkEngine`
+- `RZero`
 
-With `RkEngine`, you can:
+With `RZero`, you can:
 
 - create a game state
 - load a position
@@ -179,40 +179,40 @@ The package also exposes standalone helpers for:
 ### Main engine methods
 
 ```ts
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-rkengine.fen();
-rkengine.loadFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+rzero.fen();
+rzero.loadFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
 
-rkengine.moves();
-rkengine.moves({ square: 'e2' });
+rzero.moves();
+rzero.moves({ square: 'e2' });
 
-rkengine.move('Nf3');
-rkengine.move('e2e4');
-rkengine.move({ from: 'e2', to: 'e4' });
+rzero.move('Nf3');
+rzero.move('e2e4');
+rzero.move({ from: 'e2', to: 'e4' });
 
-rkengine.validateMove({ from: 'e2', to: 'e4' });
+rzero.validateMove({ from: 'e2', to: 'e4' });
 
-rkengine.undo();
-rkengine.redo();
+rzero.undo();
+rzero.redo();
 
-rkengine.turn();
-rkengine.pieceAt('e4');
+rzero.turn();
+rzero.pieceAt('e4');
 
-rkengine.isCheck();
-rkengine.isCheckmate();
-rkengine.isStalemate();
-rkengine.isDraw();
-rkengine.isFivefoldRepetition();
-rkengine.isThreefoldRepetition();
-rkengine.isInsufficientMaterial();
-rkengine.isSeventyFiveMoveRule();
-rkengine.isFiftyMoveRule();
-rkengine.outcome();
+rzero.isCheck();
+rzero.isCheckmate();
+rzero.isStalemate();
+rzero.isDraw();
+rzero.isFivefoldRepetition();
+rzero.isThreefoldRepetition();
+rzero.isInsufficientMaterial();
+rzero.isSeventyFiveMoveRule();
+rzero.isFiftyMoveRule();
+rzero.outcome();
 
-rkengine.history();
-rkengine.pgn();
-rkengine.loadPgn('1. e4 e5 2. Nf3 Nc6');
+rzero.history();
+rzero.pgn();
+rzero.loadPgn('1. e4 e5 2. Nf3 Nc6');
 ```
 
 ---
@@ -222,12 +222,12 @@ rkengine.loadPgn('1. e4 e5 2. Nf3 Nc6');
 Create a new engine instance like this:
 
 ```ts
-import { RkEngine } from '@yigitcicekci/rook-zero';
+import { RZero } from '@yigitcicekci/rook-zero';
 
-const rkengine = new RkEngine();
+const rzero = new RZero();
 ```
 
-Once created, `rkengine` starts from the default chess initial position.
+Once created, `rzero` starts from the default chess initial position.
 
 You can then:
 
@@ -240,16 +240,16 @@ You can then:
 
 ## Working with Moves
 
-`rkengine.move()` accepts multiple input styles.
+`rzero.move()` accepts multiple input styles.
 
 ### 1. SAN move input
 
 Useful for chess notation workflows.
 
 ```ts
-rkengine.move('Nf3');
-rkengine.move('O-O');
-rkengine.move('Qh5');
+rzero.move('Nf3');
+rzero.move('O-O');
+rzero.move('Qh5');
 ```
 
 ### 2. UCI move input
@@ -257,8 +257,8 @@ rkengine.move('Qh5');
 Useful for engine-style or protocol-style workflows.
 
 ```ts
-rkengine.move('e2e4');
-rkengine.move('e7e8q');
+rzero.move('e2e4');
+rzero.move('e7e8q');
 ```
 
 ### 3. Object move input
@@ -266,45 +266,45 @@ rkengine.move('e7e8q');
 Useful for frontend boards and APIs.
 
 ```ts
-rkengine.move({ from: 'e2', to: 'e4' });
-rkengine.move({ from: 'e7', to: 'e8', promotion: 'q' });
+rzero.move({ from: 'e2', to: 'e4' });
+rzero.move({ from: 'e7', to: 'e8', promotion: 'q' });
 ```
 
 ### Example
 
 ```ts
-import { RkEngine } from '@yigitcicekci/rook-zero';
+import { RZero } from '@yigitcicekci/rook-zero';
 
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-rkengine.move('e4');
-rkengine.move('e7e5');
-rkengine.move({ from: 'g1', to: 'f3' });
+rzero.move('e4');
+rzero.move('e7e5');
+rzero.move({ from: 'g1', to: 'f3' });
 
-console.log(rkengine.fen());
+console.log(rzero.fen());
 ```
 
 ---
 
 ## Move Generation
 
-Use `rkengine.moves()` to get legal moves from the current position.
+Use `rzero.moves()` to get legal moves from the current position.
 
 ### All legal moves
 
 ```ts
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-const moves = rkengine.moves();
+const moves = rzero.moves();
 console.log(moves);
 ```
 
 ### Legal moves for one square
 
 ```ts
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-const movesFromE2 = rkengine.moves({ square: 'e2' });
+const movesFromE2 = rzero.moves({ square: 'e2' });
 console.log(movesFromE2);
 ```
 
@@ -326,12 +326,12 @@ Instead of silently failing, the library is designed to expose validation result
 
 ### Move validation
 
-Use `rkengine.validateMove()` before applying a move.
+Use `rzero.validateMove()` before applying a move.
 
 ```ts
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-const result = rkengine.validateMove({ from: 'e2', to: 'e4' });
+const result = rzero.validateMove({ from: 'e2', to: 'e4' });
 
 if (!result.ok) {
   console.log(result.reason);
@@ -362,11 +362,11 @@ if (!result.ok) {
 ### Loading a FEN with validation awareness
 
 ```ts
-import { RkEngine } from '@yigitcicekci/rook-zero';
+import { RZero } from '@yigitcicekci/rook-zero';
 
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-const result = rkengine.loadFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+const result = rzero.loadFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
 
 if (!result.ok) {
   console.log(result.reason);
@@ -382,32 +382,32 @@ Rook Zero includes helpers for understanding the current game status.
 ### Check / mate / stalemate
 
 ```ts
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-console.log(rkengine.isCheck());
-console.log(rkengine.isCheckmate());
-console.log(rkengine.isStalemate());
+console.log(rzero.isCheck());
+console.log(rzero.isCheckmate());
+console.log(rzero.isStalemate());
 ```
 
 ### Draw detection
 
 ```ts
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-console.log(rkengine.isDraw());
-console.log(rkengine.isFivefoldRepetition());
-console.log(rkengine.isThreefoldRepetition());
-console.log(rkengine.isInsufficientMaterial());
-console.log(rkengine.isSeventyFiveMoveRule());
-console.log(rkengine.isFiftyMoveRule());
+console.log(rzero.isDraw());
+console.log(rzero.isFivefoldRepetition());
+console.log(rzero.isThreefoldRepetition());
+console.log(rzero.isInsufficientMaterial());
+console.log(rzero.isSeventyFiveMoveRule());
+console.log(rzero.isFiftyMoveRule());
 ```
 
 ### Unified outcome
 
 ```ts
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-console.log(rkengine.outcome());
+console.log(rzero.outcome());
 ```
 
 These helpers are useful for:
@@ -427,25 +427,25 @@ Rook Zero exposes move history and state navigation helpers.
 ### History
 
 ```ts
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-rkengine.move('e4');
-rkengine.move('e5');
-rkengine.move('Nf3');
+rzero.move('e4');
+rzero.move('e5');
+rzero.move('Nf3');
 
-console.log(rkengine.history());
+console.log(rzero.history());
 ```
 
 ### Undo
 
 ```ts
-rkengine.undo();
+rzero.undo();
 ```
 
 ### Redo
 
 ```ts
-rkengine.redo();
+rzero.redo();
 ```
 
 This makes it easier to build:
@@ -464,10 +464,10 @@ Rook Zero includes low-level helpers for advanced use cases.
 ### Piece inspection
 
 ```ts
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-console.log(rkengine.pieceAt('e2'));
-console.log(rkengine.turn());
+console.log(rzero.pieceAt('e2'));
+console.log(rzero.turn());
 ```
 
 ### Attack and pin helpers
@@ -484,13 +484,13 @@ console.log(rkengine.turn());
 ### Example
 
 ```ts
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-console.log(rkengine.isSquareAttacked('e4', 'b'));
-console.log(rkengine.attackersOf('e4', 'b'));
-console.log(rkengine.pinnedPieces('w'));
-console.log(rkengine.legalMovesFrom('e2'));
-console.log(rkengine.kingSquare('w'));
+console.log(rzero.isSquareAttacked('e4', 'b'));
+console.log(rzero.attackersOf('e4', 'b'));
+console.log(rzero.pinnedPieces('w'));
+console.log(rzero.legalMovesFrom('e2'));
+console.log(rzero.kingSquare('w'));
 ```
 
 These helpers are useful for:
@@ -510,17 +510,17 @@ Rook Zero supports working with FEN positions.
 ### Export current FEN
 
 ```ts
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-console.log(rkengine.fen());
+console.log(rzero.fen());
 ```
 
 ### Load a FEN
 
 ```ts
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-rkengine.loadFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+rzero.loadFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
 ```
 
 ### Default FEN
@@ -566,12 +566,12 @@ console.log(uci);
 ### Move with UCI input
 
 ```ts
-import { RkEngine } from '@yigitcicekci/rook-zero';
+import { RZero } from '@yigitcicekci/rook-zero';
 
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-rkengine.move('e2e4');
-rkengine.move('e7e5');
+rzero.move('e2e4');
+rzero.move('e7e5');
 ```
 
 ---
@@ -583,13 +583,13 @@ Rook Zero supports SAN move input and SAN helpers.
 ### Move using SAN
 
 ```ts
-import { RkEngine } from '@yigitcicekci/rook-zero';
+import { RZero } from '@yigitcicekci/rook-zero';
 
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-rkengine.move('e4');
-rkengine.move('e5');
-rkengine.move('Nf3');
+rzero.move('e4');
+rzero.move('e5');
+rzero.move('Nf3');
 ```
 
 ### Normalize SAN
@@ -617,21 +617,21 @@ Rook Zero includes PGN-related helpers.
 ### Export PGN
 
 ```ts
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-rkengine.move('e4');
-rkengine.move('e5');
-rkengine.move('Nf3');
+rzero.move('e4');
+rzero.move('e5');
+rzero.move('Nf3');
 
-console.log(rkengine.pgn());
+console.log(rzero.pgn());
 ```
 
 ### Load basic PGN
 
 ```ts
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-rkengine.loadPgn('1. e4 e5 2. Nf3 Nc6 3. Bb5');
+rzero.loadPgn('1. e4 e5 2. Nf3 Nc6 3. Bb5');
 ```
 
 ### Tokenize PGN
@@ -746,7 +746,7 @@ These helpers are useful for:
 
 ### Engine
 
-- `RkEngine`
+- `RZero`
 - `DEFAULT_FEN`
 
 ### Validation / notation helpers
@@ -828,51 +828,51 @@ import type {
 ### Validate first, then apply
 
 ```ts
-import { RkEngine } from '@yigitcicekci/rook-zero';
+import { RZero } from '@yigitcicekci/rook-zero';
 
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-const validation = rkengine.validateMove({ from: 'e2', to: 'e4' });
+const validation = rzero.validateMove({ from: 'e2', to: 'e4' });
 
 if (!validation.ok) {
   throw new Error(`Illegal move: ${validation.reason}`);
 }
 
-rkengine.move({ from: 'e2', to: 'e4' });
+rzero.move({ from: 'e2', to: 'e4' });
 ```
 
 ### Load a saved position
 
 ```ts
-import { RkEngine } from '@yigitcicekci/rook-zero';
+import { RZero } from '@yigitcicekci/rook-zero';
 
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-const result = rkengine.loadFen('r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3');
+const result = rzero.loadFen('r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3');
 
 if (!result.ok) {
   throw new Error(`Invalid FEN: ${result.reason}`);
 }
 
-console.log(rkengine.fen());
+console.log(rzero.fen());
 ```
 
 ### Detect whether the game is over
 
 ```ts
-import { RkEngine } from '@yigitcicekci/rook-zero';
+import { RZero } from '@yigitcicekci/rook-zero';
 
-const rkengine = new RkEngine();
+const rzero = new RZero();
 
-if (rkengine.isCheckmate() || rkengine.isDraw() || rkengine.isStalemate()) {
-  console.log(rkengine.outcome());
+if (rzero.isCheckmate() || rzero.isDraw() || rzero.isStalemate()) {
+  console.log(rzero.outcome());
 }
 ```
 
 ### Use in a backend move endpoint
 
 ```ts
-import { RkEngine } from '@yigitcicekci/rook-zero';
+import { RZero } from '@yigitcicekci/rook-zero';
 
 type ApplyMoveInput = {
   fen: string;
@@ -880,9 +880,9 @@ type ApplyMoveInput = {
 };
 
 export function applyMove(input: ApplyMoveInput) {
-  const rkengine = new RkEngine();
+  const rzero = new RZero();
 
-  const loadResult = rkengine.loadFen(input.fen);
+  const loadResult = rzero.loadFen(input.fen);
   if (!loadResult.ok) {
     return {
       ok: false,
@@ -890,7 +890,7 @@ export function applyMove(input: ApplyMoveInput) {
     };
   }
 
-  const validation = rkengine.validateMove(input.move);
+  const validation = rzero.validateMove(input.move);
   if (!validation.ok) {
     return {
       ok: false,
@@ -898,14 +898,14 @@ export function applyMove(input: ApplyMoveInput) {
     };
   }
 
-  const moveResult = rkengine.move(input.move);
+  const moveResult = rzero.move(input.move);
 
   return {
     ok: true,
     move: moveResult,
-    fen: rkengine.fen(),
-    history: rkengine.history(),
-    outcome: rkengine.outcome(),
+    fen: rzero.fen(),
+    history: rzero.history(),
+    outcome: rzero.outcome(),
   };
 }
 ```

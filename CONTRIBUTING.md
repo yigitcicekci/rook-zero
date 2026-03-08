@@ -38,7 +38,7 @@ npm test
 
 ```
 src/
-  core/         # RkEngine and board logic
+  core/         # RZero and board logic
   notation/     # FEN, SAN, UCI, PGN helpers
   rating/       # Elo calculation utilities
   types/        # TypeScript types and interfaces

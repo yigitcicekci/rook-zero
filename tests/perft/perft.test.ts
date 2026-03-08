@@ -1,11 +1,11 @@
-import { RkEngine } from '../../src';
+import { RZero } from '../../src';
 
 describe('perft', () => {
   it('matches standard start position node counts', () => {
-    const rkengine = new RkEngine();
+    const rzero = new RZero();
 
-    expect(rkengine.perft(1)).toBe(20);
-    expect(rkengine.perft(2)).toBe(400);
-    expect(rkengine.perft(3)).toBe(8902);
+    expect(rzero.perft(1)).toBe(20);
+    expect(rzero.perft(2)).toBe(400);
+    expect(rzero.perft(3)).toBe(8902);
   });
 });

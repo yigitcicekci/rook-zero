@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { RkEngine, DEFAULT_FEN, type Square } from '../lib/rook-zero';
+import { RZero, DEFAULT_FEN, type Square } from '../lib/rook-zero';
 import { GameMove, Match, MatchStats, Player } from '../types/game';
 import { redisService } from './redis.service';
 
@@ -8,7 +8,7 @@ function positionToSquare(position: GameMove['from']): Square {
 }
 
 export class MatchManager {
-  private engines: Map<string, RkEngine> = new Map();
+  private engines: Map<string, RZero> = new Map();
 
   async createNewMatch(): Promise<string> {
     const matchId = uuidv4();
@@ -29,7 +29,7 @@ export class MatchManager {
 
     await redisService.saveMatch(match);
     await redisService.incrementMatchCount();
-    this.engines.set(matchId, new RkEngine());
+    this.engines.set(matchId, new RZero());
 
     console.log(`Created new match: ${matchId}`);
     return matchId;
@@ -110,7 +110,7 @@ export class MatchManager {
       return { success: false, error: 'Not your turn' };
     }
 
-    const engine = this.engines.get(matchId) ?? new RkEngine(match.fen);
+    const engine = this.engines.get(matchId) ?? new RZero(match.fen);
     if (!this.engines.has(matchId)) {
       this.engines.set(matchId, engine);
     }

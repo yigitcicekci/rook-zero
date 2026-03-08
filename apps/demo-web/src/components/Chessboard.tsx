@@ -1,4 +1,4 @@
-import { RkEngine } from '@yigitcicekci/rook-zero';
+import { RZero } from '@yigitcicekci/rook-zero';
 import type { Square } from '@yigitcicekci/rook-zero';
 import { cn } from '../lib/utils';
 import { PieceIcon } from './PieceIcon';
@@ -7,7 +7,7 @@ const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 const RANKS = ['8', '7', '6', '5', '4', '3', '2', '1'];
 
 interface ChessboardProps {
-  engine: RkEngine;
+  engine: RZero;
   selectedSquare: Square | null;
   legalMoves: Square[];
   onSquareClick: (square: Square) => void;
