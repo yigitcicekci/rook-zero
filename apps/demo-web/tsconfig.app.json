@@ -24,7 +24,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "@yigitcicekci/rook-zero": ["../../dist/index.d.ts"]
+      "@yigitcicekci/rook-zero": ["../../src/index.ts"]
     }
   },
   "include": ["src"]
