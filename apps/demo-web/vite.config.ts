@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss(), cloudflare()],
   resolve: {
     alias: {
-      '@yigitcicekci/rook-zero': path.resolve(__dirname, '../../dist/index.js')
+      '@yigitcicekci/rook-zero': path.resolve(__dirname, '../../src/index.ts')
     }
   }
 })
