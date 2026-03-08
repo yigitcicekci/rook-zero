@@ -1,6 +1,6 @@
 {
   "name": "@yigitcicekci/rook-zero",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Chess rules, notation, and Elo rating library with strict validation and legal move generation.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
