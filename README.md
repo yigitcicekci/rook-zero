@@ -1,4 +1,18 @@
-# Rook Zero
+<p align="center">
+  <img src="./apps/demo-web/src/assets/rook-zero-dark.png" alt="Rook Zero Logo" width="640" />
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/@yigitcicekci/rook-zero">
+    <img src="https://img.shields.io/npm/v/@yigitcicekci/rook-zero" alt="npm version" />
+  </a>
+  <a href="https://www.npmjs.com/package/@yigitcicekci/rook-zero">
+    <img src="https://img.shields.io/npm/dm/@yigitcicekci/rook-zero" alt="npm downloads" />
+  </a>
+  <a href="https://www.npmjs.com/package/@yigitcicekci/rook-zero">
+    <img src="https://img.shields.io/npm/l/@yigitcicekci/rook-zero" alt="license" />
+  </a>
+</p>
 
 Rook Zero is a TypeScript chess rules library for **legal move generation**, **strict validation**, **draw detection**, **notation handling**, and **Elo rating calculation**.
 
